@@ -8,10 +8,12 @@ if [ ! -d 'venv' ]; then
     virtualenv -p python3 venv
     pip install -r requirements.txt
 fi
-source venv/bin/activate
-if [ ! -d $HOME'/Pictures/earthview-wallpaper' ]; then
-    mkdir $HOME'/Pictures/earthview-wallpaper'
+wget -q --tries=10 --timeout=20 --spider http://google.com
+if [[ $? -eq 0 ]]; then
+	source venv/bin/activate
+	if [ ! -d $HOME'/Pictures/earthview-wallpaper' ]; then
+    		mkdir $HOME'/Pictures/earthview-wallpaper'
+	fi
+	OUTPUT="$(python change_wallpaper.py)"
+	gsettings set org.gnome.desktop.background picture-uri file://$HOME/Pictures/earthview-wallpaper/"${OUTPUT}"
 fi
-OUTPUT="$(python change_wallpaper.py)"
-gsettings set org.gnome.desktop.background picture-uri file://$HOME/Pictures/earthview-wallpaper/"${OUTPUT}"
-
